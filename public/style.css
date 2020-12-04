@@ -3,5 +3,10 @@
 }
 
 body {
-    /* background-color: hotpink; */
+    background-color: lightblue;
+}
+
+canvas {
+    border: 2px solid black;
+    cursor: crosshair;
 }
