@@ -1,32 +1,39 @@
 const express = require('express');
 const app = express();
 const hb = require('express-handlebars');
-const cookieParser = require("cookie-parser");
 const db = require("./db");
+const cookieSession = require('cookie-session');
+const csurf = require("csurf");
 
+app.use(
+    cookieSession({
+        secret: `I'm always angry.`,
+        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
+    })
+);
+
+app.use(
+    express.urlencoded({
+        extended: false,
+    })
+);
+
+app.use(csurf()); 
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 
 app.use(express.static("./public"));
 
-app.use(express.urlencoded({
-    extended: false
-}));
-
-app.use(cookieParser());
-
 app.get("/", (req, res) => {
     res.redirect("/petition");
 });
 
 app.get("/petition", (req, res) => {
-    console.log("req.cookie", req.cookies);
     res.render("petition", {
         layout: "main",
     });
 });
-
 
 app.post("/petition", (req, res) => {
     const { firstName, lastName, submitted } = req.body;
@@ -57,7 +64,6 @@ app.get("/thanks", (req, res) => {
         res.render("thanks", {
             layout: "main",
         });
-
     }
 });
 
@@ -76,11 +82,12 @@ app.get("/signers", (req, res) => {
         res.render("signers", {
             layout: "main",
         });
-
     }
 });
 
 app.use((req, res, next) => {
+    res.set("x-frame-options", "DENY");
+    res.locals.csrfToken = req.csrfToken();
     console.log("------------");
     console.log(`${req.method} request comming in on route ${req.url}`);
     console.log("------------");

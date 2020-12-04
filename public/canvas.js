@@ -1,38 +1,30 @@
-var canvas = $("canvas");
-var ctx = canvas[0].getContext("2d");
-var click = false;
+const canvas = $("canvas");
+const ctx = canvas[0].getContext("2d");
 
-window.onload = function () {
-    canvas.mousedown(function (e) {
-        click = true;
-        draw(e.pageX, e.pageY);
-    });
+ctx.lineJoin = "round";
+ctx.lineCap = "round";
+ctx.lineWidth = 1.5;
+ctx.strokeStyle = "black";
 
-    canvas.mouseup(function (e) {
-        click = false;
-        draw(e.pageX, e.pageY);
-    });
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
 
-    canvas.mousemove(function (e) {
-        if (click === true) {
-            draw(e.pageX, e.pageY);
-        }
-    });
+function draw(e) {
+    if (!isDrawing) return;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+}
 
-    //refazer para ficar mais fluido, usar stroke ao inves de arc
-    function draw(xPos, yPos) {
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.fillStyle = "black";
-        ctx.lineJoin = "round";
-        ctx.arc(
-            xPos - canvas.offset().left,
-            yPos - canvas.offset().top,
-            2,
-            0,
-            2 * Math.PI
-        );
-        ctx.fill();
-        ctx.closePath();
-    }
-};
+canvas.on("mousedown", (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+});
+
+canvas.on("mousemove", draw);
+canvas.on("mouseup", () => (isDrawing = false));
+canvas.on("mouseout", () => (isDrawing = false));
+
