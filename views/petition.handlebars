@@ -1,5 +1,13 @@
 <div id="petition">
     <h1>Petition route worked!!</h1>
+    <p>
+        Selfies vegan nostrud man bun, four loko ex semiotics. Church-key gluten-free 
+        cillum glossier edison bulb laboris man braid vaporware authentic. Cillum 
+        occupy nulla artisan butcher, narwhal man bun echo park in cornhole chia edison 
+        bulb PBR&B. Freegan do offal cray. Microdosing sunt aliqua, meh in try-hard you 
+        probably haven't heard of them live-edge hoodie plaid. Wayfarers biodiesel 
+        adipisicing exercitation intelligentsia health goth.
+    </p>
     {{#if message}}
     <p>Uh oh, something went wrong. Please try again!</p>
     {{/if}}
@@ -11,7 +19,7 @@
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <input id="signature" type="hidden" name="signature">
         <label for="signature">Sign here</label>
-        <canvas width="350" height="150"></canvas>
+        <canvas></canvas>
         <button name="">Submit</button>
     </form>
 </div>
