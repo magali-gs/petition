@@ -8,8 +8,12 @@ CREATE TABLE signatures (
     created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-SELECT COUNT (first_name) 
+SELECT COUNT (id) 
 FROM signatures;
 
 SELECT first_name, last_name 
 FROM signatures;
+
+SELECT signature 
+FROM signatures
+WHERE id = ;

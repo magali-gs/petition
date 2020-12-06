@@ -2,15 +2,16 @@ const express = require('express');
 const app = express();
 const hb = require('express-handlebars');
 const db = require("./db");
-// const cookieSession = require('cookie-session');
-// const csurf = require("csurf");
+const cookieSession = require('cookie-session');
+const csurf = require("csurf");
+const { secret } = require("./secrets.json");
 
-// app.use(
-//     cookieSession({
-//         secret: `I'm always angry.`,
-//         maxAge: 1000 * 60 * 60 * 24 * 7 * 6
-//     })
-// );
+app.use(
+    cookieSession({
+        secret: `${secret}`,
+        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
+    })
+);
 
 app.use(
     express.urlencoded({
@@ -18,31 +19,46 @@ app.use(
     })
 );
 
-// app.use(csurf()); 
+app.use(csurf()); 
 
 app.engine("handlebars", hb());
+
 app.set("view engine", "handlebars");
 
 app.use(express.static("./public"));
+
+app.use((req, res, next) => {
+    res.set("x-frame-options", "DENY");
+    res.locals.csrfToken = req.csrfToken();
+    console.log("------------");
+    console.log(`${req.method} request comming in on route ${req.url}`);
+    console.log("------------");
+    next();
+});
 
 app.get("/", (req, res) => {
     res.redirect("/petition");
 });
 
 app.get("/petition", (req, res) => {
-    res.render("petition", {
-        layout: "main",
-    });
+    if(!req.session.signed) {
+        res.render("petition", {
+            layout: "main",
+        });
+    } else {
+        res.redirect("/thanks");
+    }
 });
 
 app.post("/petition", (req, res) => {
     const { firstName, lastName, signature } = req.body;
-    //inserir condicional para cookie - se foi submetido sem erros, 
-    //'signed' = true, se nao 'signed' = false
     db.addSigner(firstName, lastName, signature)
-        .then(() => {
-            console.log("yay it worked");
+        .then(({ rows }) => {
+            console.log("yay it worked", rows);
             // res.sendStatus(200);
+            req.session.id = rows[0].id;
+            
+            // req.session.signed = 'true';
             res.redirect("/thanks");
         })
         .catch((err) => {
@@ -54,60 +70,38 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    // if (req.cookies.signed !== "true") {
-    //     res.redirect('/petition');
-    // }
-    // else {
-        db.getTotalSigners()
-            .then(({ rows }) => {
-                const totalSigners = rows[0].count;
-                res.render("thanks", {
-                    layout: "main",
-                    totalSigners: totalSigners,
-                    signersUrl: '/signers',
-                });
-                console.log("result from getTotalSigners", rows);
-            })
-            .catch((err) => {
-                console.log("error in db.getTotalSigners", err);
-            });        
+    db.getTotalSigners()
+        .then(({ rows }) => {
+            const totalSigners = rows[0].count;
+            db.getSignature(req.session.id)
+                .then((result) => {
+                    let signatureImg = result.rows[0].signature;
+                    res.render("thanks", {
+                        layout: "main",
+                        totalSigners: totalSigners,
+                        signersUrl: "/signers",
+                        signature: signatureImg,
+                    });
+                }) ;
 
-    // }
+        })
+        .catch((err) => {
+            console.log("error in db.getTotalSigners", err);
+        });        
 });
 
 app.get("/signers", (req, res) => {
-    // if (req.cookies.signed !== "true") {
-    //     res.redirect("/petition");
-    // } else {
-        db.getFullName()
-            .then(({ rows }) => {
-                // const signerArr = rows.map( (elem) => {
-                //     return `${elem.first_name} ${elem.last_name}`;
-                // });
-
-                res.render("signers", {
-                    layout: "main",
-                    rows,
-                });
-                console.log("result from getFullName", rows);
-            })
-            .catch((err) => {
-                console.log("error in db.getFullName", err);
+    db.getFullName()
+        .then(({ rows }) => {
+            res.render("signers", {
+                layout: "main",
+                rows,
             });
-        
-        // res.render("signers", {
-        //     layout: "main",
-        // });
-    // }
-});
-
-app.use((req, res, next) => {
-    // res.set("x-frame-options", "DENY");
-    // res.locals.csrfToken = req.csrfToken();
-    console.log("------------");
-    console.log(`${req.method} request comming in on route ${req.url}`);
-    console.log("------------");
-    next();
+            console.log("result from getFullName", rows);
+        })
+        .catch((err) => {
+            console.log("error in db.getFullName", err);
+        });
 });
 
 app.listen(8080, () => console.log('Petition server listening!'));
