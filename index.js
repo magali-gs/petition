@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    if(!req.session.signed) {
+    if (!req.session.authenticated) {
         res.render("petition", {
             layout: "main",
         });
@@ -57,8 +57,7 @@ app.post("/petition", (req, res) => {
             console.log("yay it worked", rows);
             // res.sendStatus(200);
             req.session.id = rows[0].id;
-            
-            // req.session.signed = 'true';
+            req.session.authenticated = true;
             res.redirect("/thanks");
         })
         .catch((err) => {
@@ -70,11 +69,11 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    db.getTotalSigners()
-        .then(({ rows }) => {
-            const totalSigners = rows[0].count;
-            db.getSignature(req.session.id)
-                .then((result) => {
+    if (req.session.authenticated) {
+        db.getTotalSigners()
+            .then(({ rows }) => {
+                const totalSigners = rows[0].count;
+                db.getSignature(req.session.id).then((result) => {
                     let signatureImg = result.rows[0].signature;
                     res.render("thanks", {
                         layout: "main",
@@ -82,26 +81,32 @@ app.get("/thanks", (req, res) => {
                         signersUrl: "/signers",
                         signature: signatureImg,
                     });
-                }) ;
-
-        })
-        .catch((err) => {
-            console.log("error in db.getTotalSigners", err);
-        });        
+                });
+            })
+            .catch((err) => {
+                console.log("error in db.getTotalSigners", err);
+            });
+    } else {
+        res.redirect("/petition");
+    }        
 });
 
 app.get("/signers", (req, res) => {
-    db.getFullName()
-        .then(({ rows }) => {
-            res.render("signers", {
-                layout: "main",
-                rows,
+    if (req.session.authenticated) {
+        db.getFullName()
+            .then(({ rows }) => {
+                res.render("signers", {
+                    layout: "main",
+                    rows,
+                });
+                console.log("result from getFullName", rows);
+            })
+            .catch((err) => {
+                console.log("error in db.getFullName", err);
             });
-            console.log("result from getFullName", rows);
-        })
-        .catch((err) => {
-            console.log("error in db.getFullName", err);
-        });
+    } else {
+        res.redirect("/petition");
+    } 
 });
 
 app.listen(8080, () => console.log('Petition server listening!'));
