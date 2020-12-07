@@ -41,6 +41,8 @@ module.exports.addUser = (firstName, lastName, email, password) => {
     return db.query(q, params);
 };
 
+//editar em breve pq esta pegando os dados de users em vez de signatures
+//fazer inner join!!
 module.exports.getFullName = () => {
     const q = `
         SELECT first_name, last_name 
@@ -51,3 +53,12 @@ module.exports.getFullName = () => {
 
 
 /////////////////////////QUERY para login///////////////////////////
+module.exports.getUserInfo = (userEmail) => {
+    const q = `
+        SELECT id, email, password
+        FROM users
+        WHERE email = $1;
+        `;
+    const params = [userEmail];
+    return db.query(q, params);
+};
