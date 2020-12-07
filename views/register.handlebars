@@ -1,25 +1,25 @@
-<div id="petition">
-    <h1>Petition route worked!!</h1>
+<div id="register">
+    <h1>Register page</h1>
     <p>
         Selfies vegan nostrud man bun, four loko ex semiotics. Church-key gluten-free 
         cillum glossier edison bulb laboris man braid vaporware authentic. Cillum 
         occupy nulla artisan butcher, narwhal man bun echo park in cornhole chia edison 
-        bulb PBR&B. Freegan do offal cray. Microdosing sunt aliqua, meh in try-hard you 
-        probably haven't heard of them live-edge hoodie plaid. Wayfarers biodiesel 
-        adipisicing exercitation intelligentsia health goth.
+        bulb PBR&B. 
     </p>
     {{#if message}}
     <p>Uh oh, something went wrong. Please try again!</p>
     {{/if}}
     <form action="" method="POST">
-        {{!-- <label for="firstName">First Name</label>
+        <label for="firstName">First Name</label>
         <input type="text" id="firstName" name="firstName">
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" name="lastName"> --}}
+        <input type="text" id="lastName" name="lastName">
+        <label for="emailAddress">Email Address</label>
+        <input type="email" id="emailAddress" name="emailAddress">        
+        <label for="userPassword">Password</label>
+        <input id="userPassword" type="password" name="userPassword">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <input id="signature" type="hidden" name="signature">
-        <label for="signature">Sign here</label>
-        <canvas></canvas>
-        <button name="">Submit</button>
+        <button name="">Sign up</button>
     </form>
+    <p>If you are already a member, please <a href="/login">log in</a>.</p>
 </div>

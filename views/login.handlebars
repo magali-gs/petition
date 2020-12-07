@@ -1,0 +1,20 @@
+<div id="login">
+    <h1>Login Page</h1>
+    <p>
+        Microdosing sunt aliqua, meh in try-hard you probably 
+        haven't heard of them live-edge hoodie plaid. 
+        Wayfarers biodiesel adipisicing exercitation intelligentsia 
+        health goth.
+    </p>
+    {{#if message}}
+    <p>Uh oh, something went wrong. Please try again!</p>
+    {{/if}}
+    <form action="" method="POST">
+        <label for="emailAddress">Email Address</label>
+        <input type="email" id="emailAddress" name="emailAddress">
+        <label for="user-password">Password</label>
+        <input id="signature" type="password" name="user-password">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button name="">Log in</button>
+    </form>
+</div>

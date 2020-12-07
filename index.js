@@ -4,7 +4,9 @@ const hb = require('express-handlebars');
 const db = require("./db");
 const cookieSession = require('cookie-session');
 const csurf = require("csurf");
+
 const { secret } = require("./secrets.json");
+const { hash, compare } = require('./bc');
 
 app.use(
     cookieSession({
@@ -51,8 +53,8 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", (req, res) => {
-    const { firstName, lastName, signature } = req.body;
-    db.addSigner(firstName, lastName, signature)
+    const { signature } = req.body;
+    db.addSigner( signature)
         .then(({ rows }) => {
             console.log("yay it worked", rows);
             // res.sendStatus(200);
@@ -99,7 +101,7 @@ app.get("/signers", (req, res) => {
                     layout: "main",
                     rows,
                 });
-                console.log("result from getFullName", rows);
+                // console.log("result from getFullName", rows);
             })
             .catch((err) => {
                 console.log("error in db.getFullName", err);
@@ -107,6 +109,37 @@ app.get("/signers", (req, res) => {
     } else {
         res.redirect("/petition");
     } 
+});
+
+app.get("/register", (req, res) => {
+    res.render("register", {
+        layout: 'main',
+    });
+});
+
+app.post("/register", (req, res) => {
+    const { firstName, lastName, emailAddress} = req.body;
+    hash(req.body.userPassword)
+        .then((hash) => {
+            db.addUser(firstName, lastName, emailAddress, hash)
+                .then(({ rows }) => {
+                    console.log('it worked', rows[0].id);
+                    req.session.userId = rows[0].id;
+                });
+            // req.session.userId = rows.id;
+            res.redirect("/petition");
+        }).catch((err) => {
+            console.log("error in db.addSigner", err);
+            res.render("register", {
+                message: true,
+            });
+        });
+});
+
+app.get("/login", (req, res) => {
+    res.render("login", {
+        layout: "main",
+    });
 });
 
 app.listen(8080, () => console.log('Petition server listening!'));
