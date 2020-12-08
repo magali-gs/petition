@@ -101,13 +101,13 @@ app.get("/thanks", (req, res) => {
 app.get("/signers", (req, res) => {
     if(req.session.userId) {
         if (req.session.sigId) {
-            db.getFullName()
+            db.getSignersInfo()
                 .then(({ rows }) => {
                     res.render("signers", {
                         layout: "main",
                         rows,
                     });
-                // console.log("result from getFullName", rows);
+                    // console.log("result from getFullName", rows);
                 })
                 .catch((err) => {
                     console.log("error in db.getFullName", err);

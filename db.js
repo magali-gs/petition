@@ -41,12 +41,16 @@ module.exports.addUser = (firstName, lastName, email, password) => {
     return db.query(q, params);
 };
 
-//editar em breve pq esta pegando os dados de users em vez de signatures
+/////////////////////////QUERY para signers///////////////////////////
 //fazer inner join!!
-module.exports.getFullName = () => {
+module.exports.getSignersInfo = () => {
     const q = `
-        SELECT first_name, last_name 
-        FROM users;
+        SELECT first_name, last_name, age, city, url
+        FROM users 
+        JOIN signatures 
+        ON users.id = signatures.user_id
+        LEFT JOIN users_profile
+        ON users.id = users_profile.user_id
         `;
     return db.query(q);
 };
@@ -70,6 +74,11 @@ module.exports.addUserProfile = (userAge, userCity, userHomepage, userId) => {
     VALUES ($1, $2, $3, $4)
     RETURNING id;
     `;
-    const params = [userAge, userCity, userHomepage, userId];
+    const params = [
+        userAge || null,
+        userCity || null,
+        userHomepage || null,
+        userId,
+    ];
     return db.query(q, params);
 };
