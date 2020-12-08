@@ -1,20 +1,15 @@
 <div id="petition">
     <h3>
-        I'm baby blog subway tile 8-bit single-origin coffee 
-        typewriter viral pok pok. Blog unicorn coloring book, 
-        meh fanny pack kitsch wolf bushwick. Tbh you probably 
-        haven't heard of them cloud bread kinfolk keytar, 
-        thundercats vinyl pour-over chambray single-origin coffee 
-        sustainable. Cardigan put a bird on it coloring book air 
-        plant food truck taxidermy mixtape snackwave pop-up 
-        authentic hammock franzen pitchfork. Vegan pitchfork tacos 
-        enamel pin coloring book, ugh pop-up tattooed hot chicken 
-        street art umami. Bicycle rights chillwave poutine sriracha 
-        umami blog.
+        Vegan pitchfork tacos enamel pin coloring book, ugh pop-up 
+        tattooed hot chicken street art umami. Bicycle rights chillwave 
+        poutine sriracha umami blog.
     </h3>
+    {{#if message}}
+    <p class="errorMessage">Uh oh, something went wrong. Please try again!</p>
+    {{/if}}
     <div>
         {{#rows}}
-        <p>{{first_name}} {{last_name}} {{age}} <a>{{city}}</a></p>
+        <p>{{first_name}} {{last_name}} {{age}} <a href="/signers/{{city}}">{{city}}</a></p>
         {{/rows}}
     </div>
 </div>

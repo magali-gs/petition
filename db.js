@@ -55,6 +55,20 @@ module.exports.getSignersInfo = () => {
     return db.query(q);
 };
 
+module.exports.getSignersByCity = (city) => {
+    const q = `
+        SELECT first_name, last_name, age, url
+        FROM users 
+        JOIN signatures 
+        ON users.id = signatures.user_id
+        LEFT JOIN users_profile
+        ON users.id = users_profile.user_id
+        WHERE LOWER(city) = LOWER($1)
+        `;
+    const params = [city];
+    return db.query(q, params);
+};
+
 
 /////////////////////////QUERY para login///////////////////////////
 module.exports.getUserInfo = (userEmail) => {

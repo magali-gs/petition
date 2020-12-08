@@ -36,9 +36,9 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.get("/", (req, res) => {
-//     res.redirect("/petition");
-// });
+app.get("/", (req, res) => {
+    res.redirect("/petition");
+});
 
 app.get("/petition", (req, res) => {
     if(req.session.userId) {
@@ -245,10 +245,36 @@ app.post('/profile', (req, res) => {
         });
 });
 
-
-app.get("*", (req, res) => {
-    res.redirect("/register");
+app.get("/signers/:city", (req, res) => {
+    if(req.session.userId) {
+        if(req.session.sigId) {
+            const { city } = req.params;
+            db.getSignersByCity(city)
+                .then(({ rows }) => {
+                    console.log(" db.getSignersByCity worked");
+                    res.render("city", {
+                        layout: "main",
+                        city: city,
+                        rows
+                    });
+                })
+                .catch((err) => {
+                    console.log("error in b.getSignersByCity", err);
+                    res.render("signers", {
+                        message: true,
+                    });
+                });
+        } else {
+            res.redirect("/petition");
+        }
+    } else {
+        res.redirect("/login");
+    }
 });
+
+// app.get("*", (req, res) => {
+//     res.redirect("/register");
+// });
 
 app.listen(8080, () => console.log('Petition server listening!'));
 
