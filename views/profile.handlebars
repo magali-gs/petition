@@ -1,21 +1,22 @@
-<div id="petition">
-    <h1>Petition route worked!!</h1>
+<div id="profile">
+    <h1>Profile page</h1>
     <p>
         Selfies vegan nostrud man bun, four loko ex semiotics. Church-key gluten-free 
         cillum glossier edison bulb laboris man braid vaporware authentic. Cillum 
         occupy nulla artisan butcher, narwhal man bun echo park in cornhole chia edison 
-        bulb PBR&B. Freegan do offal cray. Microdosing sunt aliqua, meh in try-hard you 
-        probably haven't heard of them live-edge hoodie plaid. Wayfarers biodiesel 
-        adipisicing exercitation intelligentsia health goth.
+        bulb PBR&B. 
     </p>
     {{#if message}}
     <p class="errorMessage">Uh oh, something went wrong. Please try again!</p>
     {{/if}}
     <form action="" method="POST">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" max="120" min="14">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city">
+        <label for="homepage">Homepage</label>
+        <input type="text" id="homepage" name="homepage" placeholder="https://example.com">        
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <input id="signature" type="hidden" name="signature">
-        <label for="signature">Sign here</label>
-        <canvas></canvas>
-        <button name="">Submit</button>
+        <button name="">Continue</button>
     </form>
 </div>

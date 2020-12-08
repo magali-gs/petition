@@ -62,3 +62,14 @@ module.exports.getUserInfo = (userEmail) => {
     const params = [userEmail];
     return db.query(q, params);
 };
+
+/////////////////////////QUERY para profile///////////////////////////
+module.exports.addUserProfile = (userAge, userCity, userHomepage, userId) => {
+    const q = `
+    INSERT INTO users_profile (age, city, url, user_id) 
+    VALUES ($1, $2, $3, $4)
+    RETURNING id;
+    `;
+    const params = [userAge, userCity, userHomepage, userId];
+    return db.query(q, params);
+};

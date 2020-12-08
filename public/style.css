@@ -35,6 +35,10 @@ footer {
     font-size: 0.5em;
 }
 
+.errorMesage {
+    color: darkred;
+}
+
 form {
     display: flex;
     background: #f8f4e5;

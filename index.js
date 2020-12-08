@@ -144,7 +144,7 @@ app.post("/register", (req, res) => {
                 .then(({ rows }) => {
                     console.log("it worked", rows[0].id);
                     req.session.userId = rows[0].id;
-                    res.redirect("/login");
+                    res.redirect("/profile");
                 });
         }).catch((err) => {
             console.log("error in db.addUser", err);
@@ -204,6 +204,47 @@ app.post("/login", (req, res) => {
             });
         });
 });
+
+app.get("/profile", (req, res) => {
+    if (req.session.userId) {
+        if (req.session.sigId) {
+            res.redirect("/thanks");
+        } 
+        else {
+            res.render("profile", {
+                layout: "main",
+            });
+        } 
+    } 
+    else {
+        res.redirect("/register");
+    }
+});
+
+app.post('/profile', (req, res) => {
+    const { age, city, homepage } = req.body;
+    const newHomepage = (() => {
+        if (homepage.startsWith("http://") || homepage.startsWith("https://")) {
+            return homepage;
+        } else {
+            return '';
+        }
+    })();
+    console.log(newHomepage);
+
+    db.addUserProfile(age, city, newHomepage, req.session.userId)
+        .then(() => {
+            console.log("addUserProfile worked");
+            res.redirect("/petition");
+        })
+        .catch((err) => {
+            console.log("error in db.addUserProfile", err);
+            res.render("profile", {
+                message: true,
+            });
+        });
+});
+
 
 app.get("*", (req, res) => {
     res.redirect("/register");
