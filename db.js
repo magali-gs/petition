@@ -30,6 +30,16 @@ module.exports.getSignature = (signerId) => {
     return db.query(q, params);
 };
 
+module.exports.deleteSign = (userId) => {
+    const q = `
+        DELETE 
+        FROM signatures 
+        WHERE user_id = $1
+        `;
+    const params = [userId];
+    return db.query(q, params);
+};
+
 /////////////////////////QUERY for registro///////////////////////////
 module.exports.addUser = (firstName, lastName, email, password) => {
     const q = `
@@ -110,14 +120,13 @@ module.exports.getInfoToEdit = (userId) => {
     return db.query(q, params);
 };
 
-module.exports.editUsersTable = (firstName, lastName, email, userId) => {
+module.exports.editUsersTable = (firstName, lastName, email, password, userId) => {
     const q = `
-        INSERT INTO users(first_name, last_name, email)
-        VALUES ($1, $2, $3)  
-        ON CONFLICT (id)
-        DO UPDATE SET first_name=$1, last_name=$2, email=$3;
+        UPDATE users 
+        SET first_name=$1, last_name=$2, email=$3, password=$4
+        WHERE id=$5;
         `;
-    const params = [firstName, lastName, email];
+    const params = [firstName, lastName, email, password, userId];
     return db.query(q, params);
 };
 
@@ -128,6 +137,12 @@ module.exports.editProfileTable = (userAge, userCity, userHomepage, userId) => {
         ON CONFLICT (user_id)
         DO UPDATE SET age=$1, city=$2, url=$3, user_id=$4;
         `;
-    const params = [userAge, userCity, userHomepage, userId];
+    const params = [
+        userAge || null,
+        userCity || null,
+        userHomepage || null,
+        userId,
+    ];
     return db.query(q, params);
 };
+

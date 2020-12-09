@@ -3,15 +3,12 @@ const app = express();
 const hb = require('express-handlebars');
 const db = require("./db");
 const cookieSession = require('cookie-session');
-// const csurf = require("csurf");
-
-// const { secret } = require("./secrets.json");
+const csurf = require("csurf");
 
 let secret;
-        
 process.env.NODE_ENV === "production"
-        ? (secret = process.env)
-        : (secret = require("./secrets.json"));
+    ? (secret = process.env)
+    : (secret = require("./secrets.json"));
 
 const { hash, compare } = require('./bc');
 
@@ -28,7 +25,7 @@ app.use(
     })
 );
 
-// app.use(csurf()); 
+app.use(csurf()); 
 
 app.engine("handlebars", hb());
 
@@ -37,8 +34,8 @@ app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 
 app.use((req, res, next) => {
-    // res.set("x-frame-options", "DENY");
-    // res.locals.csrfToken = req.csrfToken();
+    res.set("x-frame-options", "DENY");
+    res.locals.csrfToken = req.csrfToken();
     console.log(`${req.method} request comming in on route ${req.url}`);
     next();
 });
@@ -65,9 +62,8 @@ app.post("/petition", (req, res) => {
     const { signature } = req.body;
     db.addSigner(signature, req.session.userId)
         .then(({ rows }) => {
-            console.log("yay it worked", rows);
+            // console.log("yay it worked", rows);
             req.session.sigId = rows[0].id;
-            // req.session.authenticated = true;
             res.redirect("/thanks");
         })
         .catch((err) => {
@@ -103,6 +99,27 @@ app.get("/thanks", (req, res) => {
     } else {
         res.redirect('/login');
     }      
+});
+
+app.post('/thanks', (req, res) => {
+    const { deleteSign, editProfile } = req.body;
+    if (deleteSign === '') {
+        console.log("delete sign btn worked");
+        db.deleteSign(req.session.userId)
+            .then(() => {
+                req.session.sigId = null;
+                res.redirect("/petition");
+            })
+            .catch((err) => {
+                console.log("error in db.deleteSign", err);
+                res.render("thanks", {
+                    layout: "main",
+                });
+            });
+    } else if (editProfile === '') {
+        console.log('edit profile btn worked');
+        res.redirect("/edit");
+    }
 });
 
 app.get("/signers", (req, res) => {
@@ -306,16 +323,99 @@ app.get("/edit", (req, res) => {
 app.post('/edit', (req, res) => {
     const { firstName, lastName, emailAddress, userPassword, age, city, homepage } = req.body;
     console.log(req.body);
-    if (userPassword.length === 0) {
-        console.log('no pw');
-        // hash the new password
-        // update 4 columns in users
-        // run upsert for user_profiles
+    if (userPassword.length > 0) {
+        console.log(' pw');
+        hash(userPassword)
+            .then((hashedPw) => {
+                db.editUsersTable(
+                    firstName,
+                    lastName,
+                    emailAddress,
+                    hashedPw,
+                    req.session.userId
+                )
+                    .then(() => {
+                        const newHomepage = (() => {
+                            if (
+                                homepage.startsWith("http://") ||
+                                homepage.startsWith("https://")
+                            ) {
+                                return homepage;
+                            } else {
+                                return "";
+                            }
+                        })();
+                        console.log(newHomepage);
+                        db.editProfileTable(
+                            age,
+                            city,
+                            newHomepage,
+                            req.session.userId
+                        )
+                            .then(() => {
+                                res.redirect('/thanks');
+                            })
+                            .catch((err) => {
+                                console.log("error in editUsersTable", err);
+                                res.render("edit", {
+                                    message: true,
+                                });
+                            });
+                    })
+                    .catch((err) => {
+                        console.log("error in editUsersTable", err);
+                        res.render("edit", {
+                            message: true,
+                        });
+                    });
+            })
+            .catch((err) => {
+                console.log("error in hash", err);
+                res.render("edit", {
+                    message: true,
+                });            
+            });
     } else {
-        console.log('pw');
-        // no password provided so only update 3 columns in users
-        // run upsert for user_profiles
+        console.log('no pw');
+        db.editUsersTable(
+            firstName,
+            lastName,
+            emailAddress,
+            req.session.userId
+        ).then(() => {
+            const newHomepage = (() => {
+                if (homepage.startsWith("http://") ||
+                homepage.startsWith("https://")) {
+                    return homepage;
+                } else {
+                    return "";
+                }})();
+            console.log(newHomepage);
+            db.editProfileTable(age, city, newHomepage, req.session.userId)
+                .then(() => {
+                    res.redirect("/thanks");
+                })
+                .catch((err) => {
+                    console.log("error in editProfileTable", err);
+                    res.render("edit", {
+                        message: true,
+                    });
+                });
+        })
+        .catch((err) => {
+                console.log("error in editUsersTable", err);
+                res.render("edit", {
+                    message: true,
+                });
+            });        
     }
+});
+
+app.get("/logout", (req, res) => {
+    req.session.userId = null;
+    res.render("login", {
+        layout: "main",
+    });
 });
 
 app.listen(process.env.PORT || 8080, () =>
