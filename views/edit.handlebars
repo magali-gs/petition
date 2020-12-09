@@ -1,0 +1,26 @@
+<div id="edit">
+    <h1>Edit your profile</h1>
+    {{#if message}}
+    <p class="errorMessage">Uh oh, something went wrong. Please try again!</p>
+    {{/if}}
+    <form action="" method="POST">
+        {{#rows}}
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" value="{{first_name}}">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" value="{{last_name}}">
+        <label for="emailAddress">Email Address</label>
+        <input type="email" id="emailAddress" name="emailAddress" value="{{email}}">        
+        <label for="userPassword">Password</label>
+        <input id="userPassword" type="password" name="userPassword">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" max="120" min="14" value="{{age}}">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" value="{{city}}">
+        <label for="homepage">Homepage</label>
+        <input type="text" id="homepage" name="homepage" placeholder="https://example.com" value="{{url}}">                          
+        {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}"> --}}
+        <button name="">Update</button>
+        {{/rows}}
+    </form>
+</div>

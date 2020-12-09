@@ -1,7 +1,7 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
-/////////////////////////QUERY para petiçao///////////////////////////
+/////////////////////////QUERY for petiçao///////////////////////////
 module.exports.addSigner = (signature, userId) => {
     const q = `
     INSERT INTO signatures (signature, user_id) 
@@ -30,7 +30,7 @@ module.exports.getSignature = (signerId) => {
     return db.query(q, params);
 };
 
-/////////////////////////QUERY para registro///////////////////////////
+/////////////////////////QUERY for registro///////////////////////////
 module.exports.addUser = (firstName, lastName, email, password) => {
     const q = `
     INSERT INTO users (first_name, last_name, email, password) 
@@ -41,7 +41,7 @@ module.exports.addUser = (firstName, lastName, email, password) => {
     return db.query(q, params);
 };
 
-/////////////////////////QUERY para signers///////////////////////////
+/////////////////////////QUERY for signers///////////////////////////
 //fazer inner join!!
 module.exports.getSignersInfo = () => {
     const q = `
@@ -70,7 +70,7 @@ module.exports.getSignersByCity = (city) => {
 };
 
 
-/////////////////////////QUERY para login///////////////////////////
+/////////////////////////QUERY for login///////////////////////////
 module.exports.getUserInfo = (userEmail) => {
     const q = `
         SELECT id, email, password
@@ -81,7 +81,7 @@ module.exports.getUserInfo = (userEmail) => {
     return db.query(q, params);
 };
 
-/////////////////////////QUERY para profile///////////////////////////
+/////////////////////////QUERY for profile///////////////////////////
 module.exports.addUserProfile = (userAge, userCity, userHomepage, userId) => {
     const q = `
     INSERT INTO users_profile (age, city, url, user_id) 
@@ -94,5 +94,40 @@ module.exports.addUserProfile = (userAge, userCity, userHomepage, userId) => {
         userHomepage || null,
         userId,
     ];
+    return db.query(q, params);
+};
+
+/////////////////////////QUERY for edit///////////////////////////
+module.exports.getInfoToEdit = (userId) => {
+    const q = `
+        SELECT first_name, last_name, email, age, city, url
+        FROM users 
+        LEFT JOIN users_profile 
+        ON users.id = users_profile.user_id
+        WHERE users.id = $1;
+        `;
+    const params = [userId];
+    return db.query(q, params);
+};
+
+module.exports.editUsersTable = (firstName, lastName, email) => {
+    const q = `
+        INSERT INTO users(first_name, last_name, email)
+        VALUES ($1, $2, $3)  
+        ON CONFLICT (id)
+        DO UPDATE SET first_name=$1, last_name=$2, email=$3;
+        `;
+    const params = [firstName, lastName, email];
+    return db.query(q, params);
+};
+
+module.exports.editProfileTable = (userAge, userCity, userHomepage, userId) => {
+    const q = `
+        INSERT INTO users_profile(age, city, url, user_id)
+        VALUES ($1, $2, $3, $4)  
+        ON CONFLICT (user_id)
+        DO UPDATE SET age=$1, city=$2, url=$3, user_id=$4;
+        `;
+    const params = [userAge, userCity, userHomepage, userId];
     return db.query(q, params);
 };

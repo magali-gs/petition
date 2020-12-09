@@ -3,7 +3,7 @@ const app = express();
 const hb = require('express-handlebars');
 const db = require("./db");
 const cookieSession = require('cookie-session');
-const csurf = require("csurf");
+// const csurf = require("csurf");
 
 const { secret } = require("./secrets.json");
 const { hash, compare } = require('./bc');
@@ -21,7 +21,7 @@ app.use(
     })
 );
 
-app.use(csurf()); 
+// app.use(csurf()); 
 
 app.engine("handlebars", hb());
 
@@ -30,8 +30,8 @@ app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 
 app.use((req, res, next) => {
-    res.set("x-frame-options", "DENY");
-    res.locals.csrfToken = req.csrfToken();
+    // res.set("x-frame-options", "DENY");
+    // res.locals.csrfToken = req.csrfToken();
     console.log(`${req.method} request comming in on route ${req.url}`);
     next();
 });
@@ -275,6 +275,41 @@ app.get("/signers/:city", (req, res) => {
 // app.get("*", (req, res) => {
 //     res.redirect("/register");
 // });
+
+app.get("/edit", (req, res) => {
+    if (req.session.userId) {
+        db.getInfoToEdit(req.session.userId)
+            .then(({ rows }) => {
+                res.render("edit", {
+                    layout: "main",
+                    rows,
+                });
+            })
+            .catch((err) => {
+                console.log("error in db.getInfoToEdit", err);
+                res.render("edit", {
+                    message: true,
+                });
+            });
+    } else {
+        res.redirect("/register");
+    }
+});
+
+app.post('/edit', (req, res) => {
+    const { firstName, lastName, emailAddress, userPassword, age, city, homepage } = req.body;
+    console.log(req.body);
+    if (userPassword.length === 0) {
+        console.log('no pw');
+     // hash the new password
+     // update 4 columns in users
+     // run upsert for user_profiles
+     } else {
+         console.log('pw');
+     // no password provided so only update 3 columns in users
+     // run upsert for user_profiles
+ }
+});
 
 app.listen(8080, () => console.log('Petition server listening!'));
 
