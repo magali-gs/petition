@@ -6,9 +6,10 @@ const cookieSession = require('cookie-session');
 // const csurf = require("csurf");
 
 // const { secret } = require("./secrets.json");
+
+let secret;
         
-const { secret } =
-    process.env.NODE_ENV === "production"
+process.env.NODE_ENV === "production"
         ? (secret = process.env)
         : (secret = require("./secrets.json"));
 
