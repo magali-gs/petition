@@ -6,11 +6,11 @@ const cookieSession = require('cookie-session');
 // const csurf = require("csurf");
 
 // const { secret } = require("./secrets.json");
-let { secret } =
-    process.env.NODE_ENV === "production"
-        ? (secret = process.env)
-        : (secret = require("./secrets.json"));
 
+process.env.NODE_ENV === "production"
+    ? (secrets = process.env)
+    : (secrets = require("./secrets"));
+        
 const { hash, compare } = require('./bc');
 
 app.use(
@@ -306,14 +306,14 @@ app.post('/edit', (req, res) => {
     console.log(req.body);
     if (userPassword.length === 0) {
         console.log('no pw');
-     // hash the new password
-     // update 4 columns in users
-     // run upsert for user_profiles
-     } else {
-         console.log('pw');
-     // no password provided so only update 3 columns in users
-     // run upsert for user_profiles
- }
+        // hash the new password
+        // update 4 columns in users
+        // run upsert for user_profiles
+    } else {
+        console.log('pw');
+        // no password provided so only update 3 columns in users
+        // run upsert for user_profiles
+    }
 });
 
 app.listen(process.env.PORT || 8080, () =>
