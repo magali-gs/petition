@@ -6,11 +6,12 @@ const cookieSession = require('cookie-session');
 // const csurf = require("csurf");
 
 // const { secret } = require("./secrets.json");
-
-process.env.NODE_ENV === "production"
-    ? (secrets = process.env)
-    : (secrets = require("./secrets"));
         
+const { secret } =
+    process.env.NODE_ENV === "production"
+        ? (secret = process.env)
+        : (secret = require("./secrets.json"));
+
 const { hash, compare } = require('./bc');
 
 app.use(
