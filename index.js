@@ -5,7 +5,12 @@ const db = require("./db");
 const cookieSession = require('cookie-session');
 // const csurf = require("csurf");
 
-const { secret } = require("./secrets.json");
+// const { secret } = require("./secrets.json");
+const { secret } =
+    process.env.NODE_ENV === "production"
+        ? (secret = process.env)
+        : (secret = require("./secrets.json"));
+        
 const { hash, compare } = require('./bc');
 
 app.use(
