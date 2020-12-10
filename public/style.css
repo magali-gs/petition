@@ -4,10 +4,10 @@
 }
 
 body {
-    /* background-size: 15px 15px;
+    background-size: 15px 15px;
     background-image:
         linear-gradient(to right, grey .5px, transparent .5px),
-        linear-gradient(to bottom, grey .5px, transparent .5px); */
+        linear-gradient(to bottom, grey .5px, transparent .5px);
     display: flex;
     font-family: 'Poppins', sans-serif;
     flex-direction: column;
@@ -24,6 +24,11 @@ main {
     margin: 5px;
     display: flex;
     flex-direction: column;
+    align-self: center;
+    border: 6px solid black;
+    width: 95%;
+    box-shadow: 15px 15px 1px #ffa580;
+    background-color: white;
 }
 
 /* h1, p {
@@ -35,8 +40,9 @@ footer {
     font-size: 0.5em;
 }
 
-.errorMesage {
+.errorMessage {
     color: darkred;
+    font-weight: bold;
 }
 
 form {
