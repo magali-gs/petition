@@ -27,18 +27,25 @@ app.use(
 
 app.use(csurf()); 
 
-app.engine("handlebars", hb());
-
-app.set("view engine", "handlebars");
-
-app.use(express.static("./public"));
-
 app.use((req, res, next) => {
     res.set("x-frame-options", "DENY");
     res.locals.csrfToken = req.csrfToken();
     console.log(`${req.method} request comming in on route ${req.url}`);
     next();
 });
+
+app.engine("handlebars", hb());
+
+app.set("view engine", "handlebars");
+
+app.use(express.static("./public"));
+
+// app.use((req, res, next) => {
+//     res.set("x-frame-options", "DENY");
+//     res.locals.csrfToken = req.csrfToken();
+//     console.log(`${req.method} request comming in on route ${req.url}`);
+//     next();
+// });
 
 app.get("/", (req, res) => {
     res.redirect("/petition");
@@ -296,10 +303,6 @@ app.get("/signers/:city", (req, res) => {
     }
 });
 
-// app.get("*", (req, res) => {
-//     res.redirect("/register");
-// });
-
 app.get("/edit", (req, res) => {
     if (req.session.userId) {
         db.getInfoToEdit(req.session.userId)
@@ -402,7 +405,7 @@ app.post('/edit', (req, res) => {
                     });
                 });
         })
-        .catch((err) => {
+            .catch((err) => {
                 console.log("error in editUsersTable", err);
                 res.render("edit", {
                     message: true,

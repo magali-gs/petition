@@ -12,10 +12,10 @@
     <p class="errorMessage">Uh oh, something went wrong. Please try again!</p>
     {{/if}}
     <form action="" method="POST">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <input id="signature" type="hidden" name="signature">
         <label for="signature">Sign here</label>
         <canvas></canvas>
         <button name="">Submit</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </form>
 </div>
