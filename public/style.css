@@ -17,7 +17,6 @@ body {
 
 main {
     flex-grow: 1;
-    /* display: grid; */
     align-items: center;
     justify-content: center;
     padding: 5px 10px;
@@ -30,10 +29,6 @@ main {
     box-shadow: 15px 15px 1px #ffa580;
     background-color: white;
 }
-
-/* h1, p {
-    background-color: #fff;
-} */
 
 footer {
     height: 20px;

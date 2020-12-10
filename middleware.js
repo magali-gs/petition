@@ -16,7 +16,7 @@ module.exports.requireLoggedInUser = (req, res, next) => {
 
 module.exports.requireSignedPetition = (req, res, next) => {
     if (!req.session.sigId) {
-        res.redirect('/thanks');
+        res.redirect('/petition');
     } else {
         next();
     }

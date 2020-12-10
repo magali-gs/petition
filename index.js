@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+// const app = express();
 const hb = require('express-handlebars');
 const db = require("./db");
 const cookieSession = require('cookie-session');
@@ -11,6 +11,8 @@ const {
     requireUnsignedPetition,
     requireLoggedOutUser
 } = require("./middleware");
+
+const app = (exports.app = express());
 
 let secret;
 process.env.NODE_ENV === "production"
@@ -40,6 +42,10 @@ app.use(
 app.use(csurf()); 
 
 app.use(safetyCookie);
+
+app.get("/home", (req, res) => {
+    res.render("home", {});
+});
 
 app.use(requireLoggedInUser);
 
@@ -127,7 +133,7 @@ app.post("/profile", (req, res) => {
         if (homepage.startsWith("http://") || homepage.startsWith("https://")) {
             return homepage;
         } else {
-            return "";
+            return null;
         }
     })();
     db.addUserProfile(age, city, newHomepage, req.session.userId)
@@ -313,7 +319,7 @@ app.post('/edit', (req, res) => {
                 homepage.startsWith("https://")) {
                     return homepage;
                 } else {
-                    return "";
+                    return null;
                 }})();
             db.editProfileTable(age, city, newHomepage, req.session.userId)
                 .then(() => {
@@ -340,6 +346,8 @@ app.get("/logout", (req, res) => {
     res.redirect("/login");
 });
 
-app.listen(process.env.PORT || 8080, () =>
-    console.log("Petition server listening!")
-);
+if (require.main == module) {
+    app.listen(process.env.PORT || 8080, () =>
+        console.log("Petition server listening!")
+    );
+}
