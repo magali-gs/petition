@@ -1,5 +1,4 @@
 const express = require('express');
-// const app = express();
 const hb = require('express-handlebars');
 const db = require("./db");
 const cookieSession = require('cookie-session');
@@ -62,13 +61,18 @@ app.post("/register", requireLoggedOutUser, (req, res) => {
     const { firstName, lastName, emailAddress, userPassword } = req.body;
     hash(userPassword)
         .then((hashedPw) => {
-            db.addUser(firstName, lastName, emailAddress, hashedPw).then(
-                ({ rows }) => {
+            db.addUser(firstName, lastName, emailAddress, hashedPw)
+                .then(({ rows }) => {
                     console.log("it worked", rows[0].id);
                     req.session.userId = rows[0].id;
                     res.redirect("/profile");
-                }
-            );
+                })
+                .catch((err) => {
+                    console.log("error in db.addUser", err);
+                    res.render("register", {
+                        message: true,
+                    });
+                });
         })
         .catch((err) => {
             console.log("error in db.addUser", err);

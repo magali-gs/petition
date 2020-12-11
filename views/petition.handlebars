@@ -1,5 +1,7 @@
-<div id="petition">
-    <h1>Petition</h1>
+<header>
+    <h1><span class="title thin">Petition</span></h1>
+</header>
+<div id="petition"  class="content">
     <p>
         Selfies vegan nostrud man bun, four loko ex semiotics. Church-key gluten-free 
         cillum glossier edison bulb laboris man braid vaporware authentic. Cillum 
@@ -9,7 +11,7 @@
         adipisicing exercitation intelligentsia health goth.
     </p>
     {{#if message}}
-    <p class="errorMessage">Uh oh, something went wrong. Please try again!</p>
+    <p class="errorMessage"><span class="highlight center">Uh oh, something went wrong. Please try again!</span></p>
     {{/if}}
     <form action="" method="POST">
         <input id="signature" type="hidden" name="signature">

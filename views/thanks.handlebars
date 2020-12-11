@@ -1,8 +1,20 @@
-<div id="thanks">
-    <h1>Thank you for your signature!</h1>
+<header>
+    <h1><span class="title thin">Thanks</span></h1>
+</header>
+<div id="thanks"  class="content">
+    <p>
+        I'm baby blog subway tile 8-bit single-origin coffee 
+        typewriter viral pok pok. Blog unicorn coloring book, 
+        meh fanny pack kitsch wolf bushwick. 
+    </p>
     <img class="signatureImg" src="{{signature}}">
-    <a href="{{signersUrl}}"><p>See all {{totalSigners}}</p></a>
-    <form method="POST">
+        <p>
+        I'm baby blog subway tile 8-bit single-origin coffee 
+        typewriter viral pok pok. Blog unicorn coloring book, 
+        meh fanny pack kitsch wolf bushwick. 
+    </p>
+    <p><a href="{{signersUrl}}">See all {{totalSigners}}</a></p>
+    <form class="no-style" method="POST">
         <button name="editProfile">Edit your profile</button>
         <button name="deleteSign">Delete your signature</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
