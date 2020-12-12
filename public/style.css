@@ -10,11 +10,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: white;
-}
-
-header {
-    /* background-color: orange; */
-    height: 70px;
+    padding: 40px 10vw;
 }
 
 main {
@@ -24,6 +20,8 @@ main {
 }
 
 footer {
+    margin: 0;
+    width: 100%;
     padding: .4rem;
     height: 30px;
     font-size: 0.8em;
@@ -33,7 +31,7 @@ footer {
 .content {
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 50px 10px 10px 10px;
     align-self: center;
 }
 
@@ -97,7 +95,7 @@ button {
                 3px 3px 1px 1px #000;
     font-size: 1em;
     line-height: 2em;
-    letter-spacing: 2px;
+    letter-spacing: 0.2em;
     outline: none;    
 }
 
@@ -134,24 +132,61 @@ input:focus {
     border-bottom: 5px solid #ffa580;
 }
 
+/* HEADER */
+header {
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    /* justify-content: right; */
+    z-index: 3;
+}
+
+header * {
+    display: inline;
+    margin: 20px;
+}
+
+header li {
+    margin: 20px;
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+}
+
+header a {
+    background: 
+    linear-gradient(180deg, rgba(230, 32, 32, 0) 70%, #f9f5e7 30%);
+}
+
+header a:hover {
+    background: 
+    linear-gradient(180deg, rgba(230, 32, 32, 0) 50%, #f9f5e7 50%);
+}
+
+.icon {
+    height: 80px;
+    width: 80px;
+}
+
+
 /* HOME STYLE */
-
-.home {
-    background: #fffffd;
-    padding: 40px 10vw;
+.shadow {
+    box-shadow: 0 0 5px 0 black;
 }
 
-.hidden {
-    visibility: hidden;
-}
 .grid-container {
   display: grid;
   grid-template: repeat(6, [row] 1fr) / repeat(12, [col] 1fr);
   grid-gap: 20px;
-  /* max-width: 650px; */
+  max-width: 650px;
   margin: 0 auto;
   overflow: hidden;
-  min-height: 90vh;
+  min-height: 100vh;
 }
 
 .item-1,
@@ -209,10 +244,47 @@ h1 {
   line-height: 1.1;
 }
 
+.content p {
+    line-height: 1.5;
+}
+
 .thin {
     font-weight: 100;
 }
 
 .center {
     text-align: center;
+}
+
+#second {
+    max-width: 100%;
+}
+
+#second .item-1 {
+    grid-column: col 1 / span 6;
+    grid-row: row 1 / span 6;
+}
+
+#second .item-2 {
+    grid-column: col 7 / span 8;
+    grid-row: row 1 / span 6;
+
+} 
+
+/* Thanks */
+
+#thanks form {
+    display: flex;
+    background: none;
+    flex-direction: row;    
+    margin: 0;
+    padding: 0px;
+    border: none;
+    box-shadow: none;
+    width: 600px;
+}
+
+#thanks button {
+    max-width: 15rem;
+    font-size: 0.7em;
 }

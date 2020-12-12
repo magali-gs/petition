@@ -1,11 +1,20 @@
 <header>
-    <h1><span class="title thin">Thanks</span></h1>
+    <img class="icon" src="https://cdn1.iconfinder.com/data/icons/fur-baby/256/Puppy-512.png">
+    <nav>
+        <li><a href="/home">Home</a></li>
+        <li><a href="/edit">Profile</a></li>
+        <li><a href="/petition">Petition</a></li>
+        <li><a href="/signers">Signers</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </nav>
 </header>
 <div id="thanks"  class="content">
+    <h1><span class="title thin">Thanks</span></h1>
     <p>
         I'm baby blog subway tile 8-bit single-origin coffee 
         typewriter viral pok pok. Blog unicorn coloring book, 
         meh fanny pack kitsch wolf bushwick. 
+        <p><a href="{{signersUrl}}">See all {{totalSigners}}</a></p>
     </p>
     <img class="signatureImg" src="{{signature}}">
         <p>
@@ -13,10 +22,9 @@
         typewriter viral pok pok. Blog unicorn coloring book, 
         meh fanny pack kitsch wolf bushwick. 
     </p>
-    <p><a href="{{signersUrl}}">See all {{totalSigners}}</a></p>
     <form class="no-style" method="POST">
-        <button name="editProfile">Edit your profile</button>
         <button name="deleteSign">Delete your signature</button>
+        <button name="editProfile">Edit your profile</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </form>
 </div>

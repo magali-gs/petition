@@ -347,7 +347,7 @@ app.post('/edit', (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session.userId = null;
-    res.redirect("/login");
+    res.redirect("/home");
 });
 
 if (require.main == module) {
