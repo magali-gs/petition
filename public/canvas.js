@@ -1,59 +1,71 @@
-const canvas = $("canvas");
-const ctx = canvas[0].getContext("2d");
-const inputField = $("#signature");
+window.onload = function() {
+    const canvas = $("canvas");
+    const ctx = canvas[0].getContext("2d");
+    const inputField = $("#signature");
 
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
 
-//to draw the signature
-ctx.lineJoin = "round";
-ctx.lineCap = "round";
-ctx.lineWidth = 1;
-ctx.strokeStyle = "black";
+    //to draw the signature
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
 
-canvas.on("mousedown", (e) => {
-    isDrawing = true;
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-});
+    canvas.on("mousedown", (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
 
-canvas.on("mousemove", draw);
+    canvas.on("mousemove", draw);
 
-canvas.on("mouseup", () => {
-    isDrawing = false;
-    inputValue();
-});
+    canvas.on("mouseup", () => {
+        isDrawing = false;
+        inputValue();
+    });
 
-//cellphone
-canvas.on("touchstart", (e) => {
-    e.preventDefault();
-    isDrawing = true;
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-});
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
 
-canvas.on("touchmove", draw);
+    //enable touchscreen
+    canvas.on("touchstart", (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+        });
+        canvas[0].dispatchEvent(mouseEvent);
 
-canvas.on("touchend", (e) => {
-    e.preventDefault();
-    isDrawing = false;
-    inputValue();
-});
+        canvas.on("touchmove", (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            });
+            canvas[0].dispatchEvent(mouseEvent);
+        });
 
+        $(document).on("touchend", () => {
+            e.preventDefault();
+            const mouseEvent = new MouseEvent("mouseup", {});
+            $(document)[0].dispatchEvent(mouseEvent);
+            inputValue();
+        });
+    });
 
-
-function draw(e) {
-    e.preventDefault();
-    if (!isDrawing) return;
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-}
-
-//assigning signature value to the hidded input field
-function inputValue() {
+    //assigning signature value to the hidded input field
+    function inputValue() {
     //to save canvas image as data url
-    let dataUrl = canvas[0].toDataURL();
-    inputField.val(dataUrl);
-}
+        let dataUrl = canvas[0].toDataURL();
+        inputField.val(dataUrl);
+    }
+};

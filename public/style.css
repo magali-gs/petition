@@ -283,6 +283,9 @@ h1 {
 
 /* RESPONSIVE */
 @media screen and (max-width: 720px) {
+    .grid-container {
+        max-width: 80vw;
+    }
     .item-1 {
     grid-column: col 2 / span 11;
     grid-row: row 1 / span 4;
@@ -290,7 +293,7 @@ h1 {
 
     .item-2 {
     grid-column: col 1 / 14;
-    grid-row: row 3 / 8;
+    grid-row: row 2 / 8;
   }
 
     #second .item-1 {
@@ -321,6 +324,7 @@ h1 {
 
   button {
       max-width: 20vw;
+      letter-spacing: normal;
   }
 
   .signatureImg {
@@ -339,5 +343,16 @@ h1 {
       margin: .3vh .3vw;
   }
 
+  .title-home {
+    font-size: calc(1.5rem + 1vmin);
+  }
 
+  .icon {
+    height: 50px;
+    width: 50px;
+  }
+
+  h3, h4{
+    padding: 5vh 0vw;
+}
 }
