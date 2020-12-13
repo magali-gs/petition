@@ -281,6 +281,12 @@ h1 {
     font-size: calc(0.4rem + 1vmin);;
 }
 
+/* iframe {
+    position: relative;
+    height: 77vh; 
+    width: 28vw;
+} */
+
 /* RESPONSIVE */
 @media screen and (max-width: 720px) {
     .grid-container {
@@ -343,13 +349,18 @@ h1 {
       margin: .3vh .3vw;
   }
 
-  .title-home {
+  .title-home, h1 {
     font-size: calc(1.5rem + 1vmin);
   }
 
   .icon {
     height: 50px;
     width: 50px;
+  }
+
+  embed {
+    height: 50vh; 
+    width: 50vw;
   }
 
   h3, h4{

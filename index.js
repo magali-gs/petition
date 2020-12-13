@@ -177,7 +177,7 @@ app.get("/thanks", requireSignedPetition, (req, res) => {
     db.getTotalSigners()
         .then(({ rows }) => {
             const totalSigners = rows[0].count;
-            db.getSignature(req.session.sigId).then((result) => {
+            db.getSignature(req.session.userId).then((result) => {
                 let signatureImg = result.rows[0].signature;
                 res.render("thanks", {
                     layout: "main",
