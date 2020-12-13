@@ -1,32 +1,30 @@
 <header>
     <img class="icon" src="https://cdn1.iconfinder.com/data/icons/fur-baby/256/Puppy-512.png">
-    {{!-- <h1><span class="title thin"> Register</span></h1> --}}
         <nav>
         <li><a href="/home">Home</a></li>
         <li><a href="/login">Login</a></li>
     </nav>
 </header>
 <div id="register"  class="content">
-    <h1><span class="title thin">Create Account</span></h1>
+    <h1><span class="title thin">Create an Account</span></h1>
     <p>
-        We are very happy that you are interesting in support our petition.
-        Before sign, you need to create a free account with us. Please fill 
-        in all the fields below.
+        We are thrilled to have your support in our mission to protect street 
+        dogs against abuse. Please create a free account to give us your voice.
     </p>
     {{#if message}}
     <p class="errorMessage"><span class="highlight center">Uh oh, something went wrong. Please try again!</span></p>
     {{/if}}
     <form action="" method="POST">
         <label for="firstName">First Name</label>
-        <input type="text" id="firstName" name="firstName">
+        <input type="text" id="firstName" name="firstName" required>
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" name="lastName">
+        <input type="text" id="lastName" name="lastName" required>
         <label for="emailAddress">Email Address</label>
-        <input type="email" id="emailAddress" name="emailAddress">        
+        <input type="email" id="emailAddress" name="emailAddress" required>        
         <label for="userPassword">Password</label>
-        <input id="userPassword" type="password" name="userPassword">
+        <input id="userPassword" type="password" name="userPassword" required>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button name="">Sign up</button>
     </form>
-    <p class="center">If you are already a member, please <a href="/login">log in</a>.</p>
+    <p class="center">If you are already a supporter, please <a href="/login">log in</a>.</p>
 </div>

@@ -9,7 +9,7 @@ let lastY = 0;
 //to draw the signature
 ctx.lineJoin = "round";
 ctx.lineCap = "round";
-ctx.lineWidth = 1.5;
+ctx.lineWidth = 1;
 ctx.strokeStyle = "black";
 
 canvas.on("mousedown", (e) => {
@@ -24,7 +24,25 @@ canvas.on("mouseup", () => {
     inputValue();
 });
 
+//cellphone
+canvas.on("touchstart", (e) => {
+    e.preventDefault();
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+});
+
+canvas.on("touchmove", draw);
+
+canvas.on("touchend", (e) => {
+    e.preventDefault();
+    isDrawing = false;
+    inputValue();
+});
+
+
+
 function draw(e) {
+    e.preventDefault();
     if (!isDrawing) return;
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);

@@ -8,7 +8,7 @@
     <h1><span class="title thin">Welcome Back!</span></h1>
     <p>
         <br>
-        Login here using your email and password to continue.
+        Use your email and password to login.
         <br>
         <br>
     </p>
@@ -17,10 +17,10 @@
     {{/if}}
     <form action="" method="POST">
         <label for="emailAddress">Email Address</label>
-        <input type="email" id="emailAddress" name="emailAddress">
+        <input type="email" id="emailAddress" name="emailAddress" required>
         <label for="user-password">Password</label>
-        <input id="userPassword" type="password" name="userPassword">
+        <input id="userPassword" type="password" name="userPassword" required>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button name="">Log in</button>
+        <button name="">Enter</button>
     </form>
 </div>

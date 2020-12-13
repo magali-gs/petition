@@ -133,6 +133,10 @@ input:focus {
     border-bottom: 5px solid #ffa580;
 }
 
+label {
+    font-size: calc(0.4rem + 1vmin);
+}
+
 /* HEADER */
 header {
     background-color: #fff;
@@ -221,6 +225,10 @@ img {
     linear-gradient(180deg, rgba(230, 32, 32, 0) 50%, #ffa580 50%);
 }
 
+.white {
+    background: 
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 20%, white 20%);
+}
 
 h1 {
   font-size: calc(2.5rem + 1vmin);
