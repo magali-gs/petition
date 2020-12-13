@@ -11,18 +11,22 @@
 <div id="thanks"  class="content">
     <h1><span class="title thin">Thanks</span></h1>
     <p>
-        I'm baby blog subway tile 8-bit single-origin coffee 
-        typewriter viral pok pok. Blog unicorn coloring book, 
-        meh fanny pack kitsch wolf bushwick. 
-        <p><a href="{{signersUrl}}">See all {{totalSigners}}</a></p>
+        We are very happy in have you as our supporter!
+        <div style='position:relative; padding-bottom:calc(176.92% + 44px)'>
+            <iframe src='https://gfycat.com/ifr/CloseDirectJaeger' frameborder='0' scrolling='no' width='100%' height='100%' style='position:absolute;top:0;left:0;' allowfullscreen>
+            </iframe>
+        </div>
+        {{!-- <img src="https://gfycat.com/closedirectjaeger"> --}}
+        <br>
+        We are keep your signature in our heart, but you can also check 
+        it!
     </p>
-    <img class="signatureImg" src="{{signature}}">
-        <p>
-        I'm baby blog subway tile 8-bit single-origin coffee 
-        typewriter viral pok pok. Blog unicorn coloring book, 
-        meh fanny pack kitsch wolf bushwick. 
+    <img class="signatureImg" src="{{signature}}" alt="signature">
+    <p>
+        Do you want to see who are the other lovely supporters?
+        <a href="{{signersUrl}}">See all {{totalSigners}} here</a>
     </p>
-    <form class="no-style" method="POST">
+    <form method="POST">
         <button name="deleteSign">Delete your signature</button>
         <button name="editProfile">Edit your profile</button>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">

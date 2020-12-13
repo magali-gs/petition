@@ -49,7 +49,7 @@ app.get("/home", (req, res) => {
 app.use(requireLoggedInUser);
 
 app.get("/", (req, res) => {
-    res.redirect("/petition");
+    res.redirect("/home");
 });
 
 app.get("/register", requireLoggedOutUser, (req, res) => {
