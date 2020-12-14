@@ -20,7 +20,7 @@ window.onload = function() {
 
     canvas.on("mousemove", draw);
 
-    canvas.on("mouseup", () => {
+    $(document).on("mouseup", () => {
         isDrawing = false;
         inputValue();
     });
